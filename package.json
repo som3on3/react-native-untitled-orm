@@ -1,0 +1,39 @@
+{
+  "name": "react-native-sqlite-storage",
+  "version": "4.1.0",
+  "description": "ORM for React Native (Android & iOS)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified yet\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/som3on3/react-native-untitled-orm.git"
+  },
+  "keywords": [
+    "react-native-sqlite-storage",
+    "react-native-sqlite",
+    "react-component",
+    "reactnative",
+    "react-native",
+    "sqlite",
+    "sqlite3",
+    "ios",
+    "android",
+    "promise",
+    "laravel",
+    "orm",
+    "eloquent"
+  ],
+  "author": "Bogdan Adam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/som3on3/react-native-untitled-orm/issues"
+  },
+  "homepage": "https://untitled.ro",
+  "peerDependencies": {
+    "react": ">=16.3.0",
+    "react-native": ">=0.60.0",
+    "react-native-sqlite-storage": "^4.1.0"
+  }
+}
