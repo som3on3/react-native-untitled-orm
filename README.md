@@ -4,6 +4,15 @@ currently only query builder (**in development**)
 
 This package depends on react-native-sqlite-storage
 
+**Installation**
+```
+yarn add https://github.com/som3on3/react-native-untitled-orm
+```
+and iOS users don't forget to:
+```
+cd ios && pod install
+```
+
 **How to use:**
 
 ```javascript
