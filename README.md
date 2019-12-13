@@ -13,3 +13,30 @@ DatabaseManager.table('users').find(user_id).then(user => {
 			console.log(user);
 });
 ```
+
+**Minimal ORM (atm):**
+
+**Find by id**
+```javascript
+User.find(2).then(user => {
+    console.log(user);
+});
+```
+
+**Insert/Create**
+```javascript
+const user = new User();
+user.email = 'mail@mail.com';
+user.first_name = 'John';
+user.last_name = 'Doe';
+user.save().then(u => {
+    console.log('created', u);
+});
+```
+
+**Mass Update**
+```javascript
+User.where('id', '>', 2).update({email: 'massupdate'}).then(results => {
+    console.log(results);
+});
+```
