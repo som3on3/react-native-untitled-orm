@@ -1,5 +1,5 @@
 {
-  "name": "react-native-sqlite-storage",
+  "name": "react-native-untitled-orm",
   "version": "4.1.0",
   "description": "ORM for React Native (Android & iOS)",
   "main": "index.js",
@@ -11,7 +11,6 @@
     "url": "https://github.com/som3on3/react-native-untitled-orm.git"
   },
   "keywords": [
-    "react-native-sqlite-storage",
     "react-native-sqlite",
     "react-component",
     "reactnative",
