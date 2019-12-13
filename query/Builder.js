@@ -636,10 +636,7 @@ export class Builder {
 
 		try {
 			await this.connection.insert(sql, bindings);
-			if (this.connection.insert_id > 0) {
-				return await this.find(this.connection.insert_id);
-			}
-			return null;
+			return this.connection.insert_id;
 		} catch (e) {
 			console.log(e);
 		}
