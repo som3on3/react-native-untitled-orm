@@ -16,6 +16,8 @@ cd ios && pod install
 **How to use:**
 
 ```javascript
+import {DatabaseManager} from 'react-native-untitled-orm';
+
 DatabaseManager.setConfig({name: 'sqlite_file_name.db'});
 
 DatabaseManager.table('users').find(user_id).then(user => {
