@@ -82,10 +82,11 @@ export class Model {
 			}
 		}
 		if (data.id && data.id > 0) {
-			const u = this.find(data.id);
+			const u = await this.find(data.id);
 			if (u) {
 				return await this.update(data);
 			} else {
+				console.log('insert', data);
 				return await this.insert(data);
 			}
 		}
