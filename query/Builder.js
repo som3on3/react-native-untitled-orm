@@ -2,7 +2,7 @@ import {
 	array_keys,
 	array_unique,
 	array_values,
-	is_array, 
+	is_array,
 	ksort,
 } from '../support/Helpers';
 import {QueryExpression} from './QueryExpression';
@@ -660,7 +660,7 @@ export class Builder {
 	};
 
 	cleanBindings = bindings => {
-		return bindings.filter(binding => !(binding instanceof QueryExpression));
+		return bindings.filter(binding => (!(binding instanceof QueryExpression) && (typeof binding !== 'function')));
 	};
 
 	runSelect = async () => {
