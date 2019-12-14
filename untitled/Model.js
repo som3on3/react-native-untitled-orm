@@ -1,4 +1,5 @@
 import {DatabaseManager as DB} from '../DatabaseManager';
+import {is_array} from 'react-native-untitled-orm/support/Helpers';
 
 export class Model {
 	_query = null;
@@ -24,8 +25,11 @@ export class Model {
 
 	mapToObject = obj => {
 		if (obj) {
-			for (const [key, value] of Object.entries(obj)) {
+			for (let [key, value] of Object.entries(obj)) {
 				if (!this._skip.includes(key)) {
+					if (is_array(value)) {
+						value = JSON.stringify(value);
+					}
 					this[key] = value;
 				}
 			}
