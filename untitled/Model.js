@@ -23,18 +23,15 @@ export class Model {
 		return name;
 	}
 
-	mapToObject = obj => {
+	mapToObject(obj) {
 		if (obj) {
-			for (let [key, value] of Object.entries(obj)) {
+			for (const [key, value] of Object.entries(obj)) {
 				if (!this._skip.includes(key)) {
-					if (is_array(value)) {
-						value = JSON.stringify(value);
-					}
 					this[key] = value;
 				}
 			}
 		}
-	};
+	}
 
 	static where(column, operator = null, value = null, boolean = 'and') {
 		const model = new this();
@@ -90,7 +87,6 @@ export class Model {
 			if (u) {
 				return await this.update(data);
 			} else {
-				console.log('insert', data);
 				return await this.insert(data);
 			}
 		}
