@@ -1,4 +1,5 @@
-import {array_keys, array_values, Grammar, is_array} from '../../support';
+import {array_keys, array_values, is_array} from '../../support/Helpers';
+import {Grammar} from '../../support/Grammar';
 
 export class QueryGrammar extends Grammar {
 	select_components = [
