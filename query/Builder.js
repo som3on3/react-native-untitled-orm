@@ -2,7 +2,8 @@ import {
 	array_keys,
 	array_unique,
 	array_values,
-	is_array, ksort,
+	is_array, 
+	ksort,
 } from '../support/Helpers';
 import {QueryExpression} from './QueryExpression';
 import {JoinClause} from './JoinClause';
