@@ -1,5 +1,4 @@
 import {QueryGrammar} from './QueryGrammar';
-import {array_keys, is_array} from '../../support';
 
 export class SQLiteQueryGrammar extends QueryGrammar {
 	_operators = [
