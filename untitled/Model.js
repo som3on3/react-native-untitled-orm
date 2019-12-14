@@ -75,6 +75,15 @@ export class Model {
 		return results.map(result => new this.constructor(result));
 	};
 
+	first = async (columns = ['*']) => {
+		this.query.limit(1);
+		const items = await this.get(columns);
+		if (items.length > 0) {
+			return items[0];
+		}
+		return null;
+	};
+
 	async save() {
 		let data = {};
 		for (const [key, value] of Object.entries(this)) {
