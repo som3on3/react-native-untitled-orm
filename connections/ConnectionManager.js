@@ -1,6 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
 import {AppState} from 'react-native';
-import {array_keys, array_values} from '../support';
+import {array_keys, array_values} from '../support/Helpers';
 SQLite.DEBUG(true);
 SQLite.enablePromise(true);
 
@@ -143,6 +143,14 @@ export class ConnectionManager {
 
 	delete = async (sql, params) => {
 		return await this.select(sql, params);
+	};
+
+	getMarker = () => {
+		return '?';
+	};
+
+	getSchemaManager = () => {
+		//todo...
 	};
 
 	static getInstance = () => {
