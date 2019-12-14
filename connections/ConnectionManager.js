@@ -25,13 +25,13 @@ export class ConnectionManager {
 		this.initDB();
 	}
 
-	static setConfig = config => {
+	static setConfig(config) {
 		let keys = array_keys(config);
 		let values = array_values(config);
 		for (let i = 0; i < keys.length; i++) {
 			ConnectionManager.config[keys[i]] = values[i];
 		}
-	};
+	}
 
 	_handleAppStateChange = nextAppState => {
 		if (
@@ -48,7 +48,7 @@ export class ConnectionManager {
 		this.appState = nextAppState;
 	};
 
-	closeDB = () => {
+	closeDB() {
 		if (this.connected && this.db) {
 			this.db
 				.close()
@@ -61,7 +61,7 @@ export class ConnectionManager {
 					throw new Error(error);
 				});
 		}
-	};
+	}
 
 	waitForConnection = () => {
 		return new Promise(connected => {
@@ -73,9 +73,9 @@ export class ConnectionManager {
 				}, 2);
 			}
 		});
-	};
+	}
 
-	initDB = () => {
+	initDB() {
 		if (!this.connected) {
 			let db;
 			SQLite.echoTest()
@@ -103,9 +103,9 @@ export class ConnectionManager {
 					throw new Error(error);
 				});
 		}
-	};
+	}
 
-	select = async (sql, params) => {
+	async select(sql, params) {
 		if (!this.connected) {
 			await this.waitForConnection();
 		}
@@ -131,32 +131,32 @@ export class ConnectionManager {
 					console.log(error.message);
 				});
 		});
-	};
+	}
 
-	insert = async (sql, params) => {
+	async insert(sql, params) {
 		return await this.select(sql, params);
-	};
+	}
 
-	update = async (sql, params) => {
+	async update(sql, params) {
 		return await this.select(sql, params);
-	};
+	}
 
-	delete = async (sql, params) => {
+	async delete(sql, params) {
 		return await this.select(sql, params);
-	};
+	}
 
-	getMarker = () => {
+	getMarker() {
 		return '?';
-	};
+	}
 
-	getSchemaManager = () => {
+	getSchemaManager() {
 		//todo...
-	};
+	}
 
-	static getInstance = () => {
+	static getInstance() {
 		if (!ConnectionManager.instance) {
 			ConnectionManager.instance = new ConnectionManager();
 		}
 		return ConnectionManager.instance;
-	};
+	}
 }
