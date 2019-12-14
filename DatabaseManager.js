@@ -1,5 +1,7 @@
 import {ConnectionManager} from './connections/ConnectionManager';
-import {Builder, SQLiteQueryGrammar, SQLiteQueryProcessor} from './query';
+import {Builder} from './query/Builder';
+import {SQLiteQueryGrammar} from './query/grammars/SQLiteQueryGrammar';
+import {SQLiteQueryProcessor} from './query/processors/SQLiteQueryProcessor';
 
 export class DatabaseManager {
 	static grammar = new SQLiteQueryGrammar();
