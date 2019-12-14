@@ -1,4 +1,4 @@
-import {QueryExpression} from '../query';
+import {QueryExpression} from '../query/QueryExpression';
 
 export class Grammar {
 	marker = '?';
