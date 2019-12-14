@@ -17,14 +17,14 @@ export class QueryGrammar extends Grammar {
 		'lock',
 	];
 
-	compileSelect = query => {
+	compileSelect(query) {
 		if (query.columns.length === 0) {
 			query.columns = ['*'];
 		}
 		return this.concatenate(this.compileComponents(query)).trim();
-	};
+	}
 
-	compileComponents = (query, _ = null) => {
+	compileComponents(query, _ = null) {
 		let sql = {};
 		for (let i = 0, cnt = this.select_components.length; i < cnt; i++) {
 			const component = this.select_components[i];
@@ -36,9 +36,9 @@ export class QueryGrammar extends Grammar {
 			}
 		}
 		return sql;
-	};
+	}
 
-	compileAggregate = (query, aggregate) => {
+	compileAggregate(query, aggregate) {
 		let column = this.columnize(aggregate.columns);
 		if (query.distinct_ && column !== '*') {
 			column = 'DISTINCT ' + column;
@@ -50,21 +50,21 @@ export class QueryGrammar extends Grammar {
 			column +
 			') AS aggregate'
 		);
-	};
+	}
 
-	compileColumns = (query, columns) => {
+	compileColumns(query, columns) {
 		if (query.aggregate) {
 			return '';
 		}
 		const select = query.distinct_ ? 'SELECT DISTINCT ' : 'SELECT ';
 		return select + this.columnize(columns);
-	};
+	}
 
-	compileFrom = (query, table) => {
+	compileFrom(query, table) {
 		return 'FROM ' + this.wrapTable(table);
-	};
+	}
 
-	compileJoins = (query, joins) => {
+	compileJoins(query, joins) {
 		let sql = [];
 		query.setBindings([], 'join');
 
@@ -85,18 +85,18 @@ export class QueryGrammar extends Grammar {
 		});
 
 		return sql.join(' ');
-	};
+	}
 
-	compileJoinConstraints = (clause, _ = null) => {
+	compileJoinConstraints(clause, _ = null) {
 		const first = this.wrapTable(clause.first);
 		const second = clause.where ? this.getMarker() : this.wrap(clause.second);
 
 		return [clause.boolean.toUpperCase(), first, clause.operator, second].join(
 			' ',
 		);
-	};
+	}
 
-	compileWheres = (query, _ = null) => {
+	compileWheres(query, _ = null) {
 		let sql = [];
 		if (query.wheres.length === 0) {
 			return '';
@@ -113,9 +113,9 @@ export class QueryGrammar extends Grammar {
 		}
 
 		return '';
-	};
+	}
 
-	whereNested = (query, where) => {
+	whereNested(query, where) {
 		const nested = where.query;
 		const wheres = this.compileWheres(nested);
 		let sql = [];
@@ -123,97 +123,97 @@ export class QueryGrammar extends Grammar {
 			sql.push(wheres[i]);
 		}
 		return '(' + sql.join('') + ')';
-	};
+	}
 
-	whereSub = (query, where) => {
+	whereSub(query, where) {
 		const select = this.compileSelect(where.query);
 		return this.wrap(where.column) + ' ' + where.operator + ' (' + select + ')';
-	};
+	}
 
-	whereBasic = (query, where) => {
+	whereBasic(query, where) {
 		const value = this.parameter(where.value);
 		return this.wrap(where.column) + ' ' + where.operator + ' ' + value;
-	};
+	}
 
-	whereBetween = (query, where) => {
+	whereBetween(query, where) {
 		const between = where.not ? 'NOT BETWEEN' : 'BETWEEN';
 		return (
 			[this.wrap(where.column), between, this.getMarker()].join(' ') +
 			' AND ' +
 			this.getMarker()
 		);
-	};
+	}
 
-	whereExists = (query, where) => {
+	whereExists(query, where) {
 		return 'EXISTS (' + this.compileSelect(where.query) + ')';
-	};
+	}
 
-	whereNotExists = (query, where) => {
+	whereNotExists(query, where) {
 		return 'NOT EXISTS (' + this.compileSelect(where.query) + ')';
-	};
+	}
 
-	whereIn = (query, where) => {
+	whereIn(query, where) {
 		if (!where.values || where.values.length === 0) {
 			return '0 = 1';
 		}
 		const values = this.parameterize(where.values);
 		return this.wrap(where.column) + ' IN (' + values + ')';
-	};
+	}
 
-	whereNotIn = (query, where) => {
+	whereNotIn(query, where) {
 		if (!where.values || where.values.length === 0) {
 			return '1 = 1';
 		}
 		const values = this.parameterize(where.values);
 		return this.wrap(where.column) + ' NOT IN (' + values + ')';
-	};
+	}
 
-	whereInSub = (query, where) => {
+	whereInSub(query, where) {
 		const select = this.compileSelect(where.query);
 		return this.wrap(where.column) + ' IN (' + select + ')';
-	};
+	}
 
-	whereNotInSub = (query, where) => {
+	whereNotInSub(query, where) {
 		const select = this.compileSelect(where.query);
 		return this.wrap(where.column) + ' NOT IN (' + select + ')';
-	};
+	}
 
-	whereNull = (query, where) => {
+	whereNull(query, where) {
 		return this.wrap(where.column) + ' IS NULL';
-	};
+	}
 
-	whereNotNull = (query, where) => {
+	whereNotNull(query, where) {
 		return this.wrap(where.column) + ' IS NOT NULL';
-	};
+	}
 
-	whereRaw = (query, where) => {
+	whereRaw(query, where) {
 		throw new Error('TODO whereRaw');
-	};
+	}
 
-	compileGroups = (query, groups) => {
+	compileGroups(query, groups) {
 		if (!groups || groups.length === 0) {
 			return '';
 		}
 		return 'GROUP BY ' + this.columnize(groups);
-	};
+	}
 
-	compileHavings = (query, havings) => {
+	compileHavings(query, havings) {
 		if (!havings || havings.length === 0) {
 			return '';
 		}
 
 		const sql = havings.map(this.compileHaving).join(' ');
 		return 'HAVING ' + sql.replace(/and |or /i, '');
-	};
+	}
 
-	compileHaving = having => {
+	compileHaving(having) {
 		if (having.type === 'raw') {
 			return having.boolean.toUpperCase + ' ' + having.sql;
 		}
 		return this.compileBasicHaving(having);
-	};
+	}
 
-	compileBasicHaving = having => {
+	compileBasicHaving(having) {
 		const column = this.wrap(having.column);
 		const parameter = this.parameter(having.value);
 
@@ -223,9 +223,9 @@ export class QueryGrammar extends Grammar {
 			having.operator,
 			parameter,
 		].join(' ');
-	};
+	}
 
-	compileOrders = (query, orders) => {
+	compileOrders(query, orders) {
 		if (!orders || orders.length === 0) {
 			return '';
 		}
@@ -242,30 +242,30 @@ export class QueryGrammar extends Grammar {
 		});
 
 		return 'ORDER BY ' + compiled.join(', ');
-	};
+	}
 
-	compileLimit = (query, limit) => {
+	compileLimit(query, limit) {
 		const l = parseInt(limit.toString(), 0);
 		if (l) {
 			return 'LIMIT ' + l;
 		}
 		return '';
-	};
+	}
 
-	compileOffset = (query, offset) => {
+	compileOffset(query, offset) {
 		const l = parseInt(offset.toString(), 0);
 		if (l) {
 			return 'OFFSET ' + l;
 		}
 		return '';
-	};
+	}
 
-	compileUnion = union => {
+	compileUnion(union) {
 		const joiner = union.all ? ' UNION ALL ' : ' UNION ';
 		return joiner + union.query.toSql();
-	};
+	}
 
-	compileUnions = (query, _ = null) => {
+	compileUnions(query, _ = null) {
 		let sql = [];
 		query.unions.forEach(union => {
 			sql.push(this.compileUnion(union));
@@ -284,9 +284,9 @@ export class QueryGrammar extends Grammar {
 		}
 
 		return sql.join(' ');
-	};
+	}
 
-	compileInsert = (query, values) => {
+	compileInsert(query, values) {
 		const table = this.wrapTable(query.from_);
 		if (!is_array(values)) {
 			values = [values];
@@ -296,13 +296,13 @@ export class QueryGrammar extends Grammar {
 		const value = Array(values.length).fill('(' + parameters + ')');
 		parameters = value.join(', ');
 		return 'INSERT INTO ' + table + ' (' + columns + ') VALUES ' + parameters;
-	};
+	}
 
-	compileInsertGetId = (query, values, sequence) => {
+	compileInsertGetId(query, values, sequence) {
 		return this.compileInsert(query, values);
-	};
+	}
 
-	compileUpdate = (query, values) => {
+	compileUpdate(query, values) {
 		const table = this.wrapTable(query.from_);
 		let columns = [];
 		const ks = array_keys(values);
@@ -316,21 +316,21 @@ export class QueryGrammar extends Grammar {
 		const joins = query.joins ? ' ' + this.compileJoins(query, query.joins) : '';
 		let where = this.compileWheres(query);
 		return ('UPDATE ' + table + joins + ' SET ' + columns + ' ' + where).trim();
-	};
+	}
 
-	compileDelete = query => {
+	compileDelete(query) {
 		const table = this.wrapTable(query.from_);
 		const where = query.wheres.length > 0 ? this.compileWheres(query) : '';
 		return ('DELETE FROM ' + table + ' ' + where).trim();
-	};
+	}
 
-	compileTruncate = query => {
+	compileTruncate(query) {
 		let value = {};
 		value['TRUNCATE ' + this.wrapTable(query.from_)] = [];
 		return value;
-	};
+	}
 
-	concatenate = segments => {
+	concatenate(segments) {
 		let parts = [];
 		for (let i = 0, cnt = this.select_components.length; i < cnt; i++) {
 			const component = this.select_components[i];
@@ -340,9 +340,9 @@ export class QueryGrammar extends Grammar {
 			}
 		}
 		return parts.join(' ');
-	};
+	}
 
-	removeLeadingBoolean = value => {
+	removeLeadingBoolean(value) {
 		return value.replace(/AND |OR /i, '');
-	};
+	}
 }

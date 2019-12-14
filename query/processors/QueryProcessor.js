@@ -1,5 +1,5 @@
 export class QueryProcessor {
-	processSelect = async (query, results) => {
+	async processSelect(query, results) {
 		return await results();
-	};
+	}
 }

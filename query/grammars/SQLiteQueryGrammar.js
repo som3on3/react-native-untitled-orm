@@ -19,12 +19,12 @@ export class SQLiteQueryGrammar extends QueryGrammar {
 		'>>',
 	];
 
-	compileTruncate = query => {
+	compileTruncate(query) {
 		let sql = {};
 		sql['DELETE FROM sqlite_sequence WHERE name = ' + this.getMarker()] = [
 			query.from_,
 		];
 		sql['DELETE FROM ' + this.wrapTable(query.from_)] = [];
 		return sql;
-	};
+	}
 }

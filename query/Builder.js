@@ -81,21 +81,21 @@ export class Builder {
 		this.processor = processor;
 	}
 
-	select = (columns = ['*']) => {
+	select(columns = ['*']) {
 		this.columns = columns;
 		return this;
-	};
+	}
 
-	selectRaw = (expressions, bindings = null) => {
+	selectRaw(expressions, bindings = null) {
 		this.addSelect(new QueryExpression(expressions));
 
 		if (bindings) {
 			this.addBinding(bindings, 'select');
 		}
 		return this;
-	};
+	}
 
-	selectSub = (query, as) => {
+	selectSub(query, as) {
 		let bindings = [];
 		if (query instanceof Builder) {
 			bindings = query.getBindings();
@@ -108,31 +108,31 @@ export class Builder {
 
 		const sql = '(' + query + ') as ' + this.grammar.wrap(as);
 		return this.selectRaw(sql, bindings);
-	};
+	}
 
-	addSelect = column => {
+	addSelect(column) {
 		this.columns.push(column);
 		return this;
-	};
+	}
 
-	distinct = () => {
+	distinct() {
 		this.distinct_ = true;
 		return this;
-	};
+	}
 
-	from = table => {
+	from(table) {
 		this.from_ = table;
 		return this;
-	};
+	}
 
-	join = (
+	join(
 		table,
 		one = null,
 		operator = null,
 		two = null,
 		type = 'inner',
 		where = false,
-	) => {
+	) {
 		if (table instanceof JoinClause) {
 			this.joins.push(table);
 		} else {
@@ -144,36 +144,36 @@ export class Builder {
 			this.joins.push(join);
 		}
 		return this;
-	};
+	}
 
-	joinWhere = (table, one, operator, two, type = 'inner') => {
+	joinWhere(table, one, operator, two, type = 'inner') {
 		this.join(table, one, operator, two, type, true);
 		return this;
-	};
+	}
 
-	leftJoin = (table, one = null, operator = null, two = null) => {
+	leftJoin(table, one = null, operator = null, two = null) {
 		if (table instanceof JoinClause) {
 			table.type = 'left';
 		}
 		return this.join(table, one, operator, two, 'left');
-	};
+	}
 
-	leftJoinWhere = (table, one, operator, two) => {
+	leftJoinWhere(table, one, operator, two) {
 		return this.joinWhere(table, one, operator, two, 'left');
-	};
+	}
 
-	rightJoin = (table, one = null, operator = null, two = null) => {
+	rightJoin(table, one = null, operator = null, two = null) {
 		if (table instanceof JoinClause) {
 			table.type = 'right';
 		}
 		return this.join(table, one, operator, two, 'right');
-	};
+	}
 
-	rightJoinWhere = (table, one, operator, two) => {
+	rightJoinWhere(table, one, operator, two) {
 		return this.joinWhere(table, one, operator, two, 'right');
-	};
+	}
 
-	addBinding = (value, type = 'where') => {
+	addBinding(value, type = 'where') {
 		if (!value) {
 			return this;
 		}
@@ -181,25 +181,25 @@ export class Builder {
 			this.bindings[type].push(value);
 		}
 		return this;
-	};
+	}
 
-	setBindings = (bindings, type = 'where') => {
+	setBindings(bindings, type = 'where') {
 		if (this.bindings[type]) {
 			this.bindings[type] = bindings;
 		}
 		return this;
-	};
+	}
 
-	mergeBindings = query => {
+	mergeBindings(query) {
 		const types = array_keys(this.bindings);
 		const bindings = query.getRawBindings();
 		types.forEach(type => {
 			this.bindings[type] = bindings[type];
 		});
 		return this;
-	};
+	}
 
-	merge = query => {
+	merge(query) {
 		this.columns.push(...query.columns);
 		this.joins.push(...query.joins);
 		this.wheres.push(...query.wheres);
@@ -232,22 +232,22 @@ export class Builder {
 		this.union_orders.push(...query.union_orders);
 
 		this.mergeBindings(query);
-	};
+	}
 
-	getBindings = () => {
+	getBindings() {
 		let bindings = [];
 		let values = array_values(this.bindings);
 		for (let i = 0, cnt = values.length; i < cnt; i++) {
 			bindings.push(...values[i]);
 		}
 		return bindings;
-	};
+	}
 
-	getRawBindings = () => {
+	getRawBindings() {
 		return this.bindings;
-	};
+	}
 
-	where = (column, operator = null, value = null, boolean = 'and') => {
+	where(column, operator = null, value = null, boolean = 'and') {
 		if (column instanceof Object) {
 			const ks = array_keys(column);
 			const vs = array_values(column);
@@ -304,29 +304,29 @@ export class Builder {
 			}
 			return this;
 		}
-	};
+	}
 
-	orWhere = (column, operator = null, value = null) => {
+	orWhere(column, operator = null, value = null) {
 		return this.where(column, operator, value, 'or');
-	};
+	}
 
-	invalidOperatorAndValue = (operator, value) => {
+	invalidOperatorAndValue(operator, value) {
 		const is_operator = this.operators.includes(operator);
 		return is_operator && operator != '=' && !value;
-	};
+	}
 
-	whereRaw = (sql, bindings = null, boolean = 'and') => {
+	whereRaw(sql, bindings = null, boolean = 'and') {
 		const type = 'raw';
 		this.wheres.push({type: type, sql: sql, boolean: boolean});
 		this.addBinding(bindings, 'where');
 		return this;
-	};
+	}
 
-	orWhereRaw = (sql, bindings = null) => {
+	orWhereRaw(sql, bindings = null) {
 		return this.whereRaw(sql, bindings, 'or');
-	};
+	}
 
-	whereBetween = (column, values, boolean = 'and', negate = false) => {
+	whereBetween(column, values, boolean = 'and', negate = false) {
 		const type = 'between';
 
 		this.wheres.push({
@@ -339,48 +339,48 @@ export class Builder {
 		this.addBinding(values, 'where');
 
 		return this;
-	};
+	}
 
-	orWhereBetween = (column, values) => {
+	orWhereBetween(column, values) {
 		return this.whereBetween(column, values, 'or');
-	};
+	}
 
-	whereNotBetween = (column, values, boolean = 'and') => {
+	whereNotBetween(column, values, boolean = 'and') {
 		return this.whereBetween(column, values, boolean, true);
-	};
+	}
 
-	orWhereNotBetween = (column, values) => {
+	orWhereNotBetween(column, values) {
 		return this.whereNotBetween(column, values, 'or');
-	};
+	}
 
-	whereNested = (query, boolean = 'and') => {
+	whereNested(query, boolean = 'and') {
 		query.from(this.from_);
 		return this.addNestedWhereQuery(query, boolean);
-	};
+	}
 
-	forNestedWhere = () => {
+	forNestedWhere() {
 		const query = this.newQuery();
 		query.from(this.from_);
 		return query;
-	};
+	}
 
-	addNestedWhereQuery = (query, boolean = 'and') => {
+	addNestedWhereQuery(query, boolean = 'and') {
 		if (query.wheres.length > 0) {
 			this.wheres.push({type: 'nested', query: query, boolean: boolean});
 			this.mergeBindings(query);
 		}
 		return this;
-	};
+	}
 
-	addNestedWhereQuery = (query, boolean = 'and') => {
+	addNestedWhereQuery(query, boolean = 'and') {
 		if (query.wheres.length > 0) {
 			this.wheres.push({type: 'nested', query: query, boolean: boolean});
 			this.mergeBindings(query);
 		}
 		return this;
-	};
+	}
 
-	whereSub = (column, operator, query, boolean) => {
+	whereSub(column, operator, query, boolean) {
 		const type = 'sub';
 		this.wheres.push({
 			type: type,
@@ -391,9 +391,9 @@ export class Builder {
 		});
 		this.mergeBindings(query);
 		return this;
-	};
+	}
 
-	whereExists = (query, boolean = 'and', negate = false) => {
+	whereExists(query, boolean = 'and', negate = false) {
 		let type = '';
 		if (negate) {
 			type = 'not_exists';
@@ -405,21 +405,21 @@ export class Builder {
 
 		this.mergeBindings(query);
 		return this;
-	};
+	}
 
-	orWhereExists = (query, negate = false) => {
+	orWhereExists(query, negate = false) {
 		return this.whereExists(query, 'or', negate);
-	};
+	}
 
-	whereNotExists = (query, boolean = 'and') => {
+	whereNotExists(query, boolean = 'and') {
 		return this.whereExists(query, boolean, true);
-	};
+	}
 
-	orWhereNotExists = query => {
+	orWhereNotExists(query) {
 		return this.orWhereExists(query, true);
-	};
+	}
 
-	whereIn = (column, values, boolean = 'and', negate = false) => {
+	whereIn(column, values, boolean = 'and', negate = false) {
 		const type = negate ? 'not_in' : 'in';
 		if (values instanceof Builder) {
 			return this.whereInSub(column, values, boolean, negate);
@@ -438,21 +438,21 @@ export class Builder {
 
 			return this;
 		}
-	};
+	}
 
-	whereNotIn = (column, values, boolean = 'and') => {
+	whereNotIn(column, values, boolean = 'and') {
 		return this.whereIn(column, values, boolean, true);
-	};
+	}
 
-	orWhereIn = (column, values) => {
+	orWhereIn(column, values) {
 		return this.whereIn(column, values, 'or');
-	};
+	}
 
-	orWhereNotIn = (column, values) => {
+	orWhereNotIn(column, values) {
 		return this.whereNotIn(column, values, 'or');
-	};
+	}
 
-	whereInSub = (column, query, boolean, negate = false) => {
+	whereInSub(column, query, boolean, negate = false) {
 		const type = negate ? 'not_in_sub' : 'in_sub';
 		this.wheres.push({
 			type: type,
@@ -463,32 +463,32 @@ export class Builder {
 		this.mergeBindings(query);
 
 		return this;
-	};
+	}
 
-	whereNull = (column, boolean = 'and', negate = false) => {
+	whereNull(column, boolean = 'and', negate = false) {
 		const type = negate ? 'not_null' : 'null';
 		this.wheres.push({type: type, column: column, boolean: boolean});
 		return this;
-	};
+	}
 
-	whereNotNull = (column, boolean = 'and') => {
+	whereNotNull(column, boolean = 'and') {
 		return this.whereNull(column, boolean, true);
-	};
+	}
 
-	orWhereNull = column => {
+	orWhereNull(column) {
 		return this.whereNull(column, 'or');
-	};
+	}
 
-	orWhereNotNull = column => {
+	orWhereNotNull(column) {
 		return this.whereNotNull(column, 'or');
-	};
+	}
 
-	groupBy = columns => {
+	groupBy(columns) {
 		this.groups.push(...columns);
 		return this;
-	};
+	}
 
-	having = (column, operator = null, value = null, boolean = 'and') => {
+	having(column, operator = null, value = null, boolean = 'and') {
 		const type = 'basic';
 		this.havings.push({
 			type: type,
@@ -501,23 +501,23 @@ export class Builder {
 			this.addBinding(value, 'having');
 		}
 		return this;
-	};
+	}
 
-	orHaving = (column, operator = null, value = null) => {
+	orHaving(column, operator = null, value = null) {
 		return this.having(column, operator, value, 'or');
-	};
+	}
 
-	havingRaw = (sql, bindings = null, boolean = 'and') => {
+	havingRaw(sql, bindings = null, boolean = 'and') {
 		this.havings.push({type: 'raw', sql: sql, boolean: boolean});
 		this.addBinding(bindings, 'having');
 		return this;
-	};
+	}
 
-	orHavingRaw = (sql, bindings = null) => {
+	orHavingRaw(sql, bindings = null) {
 		return this.havingRaw(sql, bindings, 'or');
-	};
+	}
 
-	orderBy = (column, direction = 'asc') => {
+	orderBy(column, direction = 'asc') {
 		const prop = this.unions.length > 0 ? 'union_orders' : 'orders';
 		if (direction.toLowerCase() === 'asc') {
 			direction = 'asc';
@@ -527,80 +527,80 @@ export class Builder {
 		this[prop].push({column: column, direction: direction});
 
 		return this;
-	};
+	}
 
-	latest = (column = 'created_at') => {
+	latest(column = 'created_at') {
 		return this.orderBy(column, 'desc');
-	};
+	}
 
-	oldest = (column = 'created_at') => {
+	oldest(column = 'created_at') {
 		return this.orderBy(column, 'asc');
-	};
+	}
 
-	orderByRaw = (sql, bindings = null) => {
+	orderByRaw(sql, bindings = null) {
 		if (!bindings) {
 			bindings = [];
 		}
 		this.orders.push({type: 'raw', sql: sql});
 		this.addBinding(bindings, 'order');
 		return this;
-	};
+	}
 
-	offset = value => {
+	offset(value) {
 		const prop = this.unions.length > 0 ? 'union_offset' : 'offset';
 		this[prop] = Math.max(0, value);
 		return this;
-	};
+	}
 
-	skip = value => {
+	skip(value) {
 		this.offset(value);
 		return this;
-	};
+	}
 
-	limit = value => {
+	limit(value) {
 		const prop = this.unions.length > 0 ? 'union_limit' : 'limit';
 		this[prop] = value;
 		return this;
-	};
+	}
 
-	take = value => {
+	take(value) {
 		this.limit(value);
 		return this;
-	};
+	}
 
-	forPage = (page, per_page = 15) => {
+	forPage(page, per_page = 15) {
 		this.skip((page - 1) * per_page);
 		this.take(per_page);
 		return this;
-	};
+	}
 
-	union = (query, all = false) => {
+	union(query, all = false) {
 		this.unions.push({query: query, all: all});
 		this.mergeBindings(query);
 		return this;
-	};
+	}
 
-	unionAll = query => {
+	unionAll(query) {
 		return this.union(query, true);
-	};
+	}
 
-	toSql = () => {
+	toSql() {
 		const sql = this.grammar.compileSelect(this);
 		return sql;
-	};
+	}
 
-	find = async (id, columns = ['*']) => {
+	async find(id, columns = ['*']) {
 		this.where('id', '=', id);
 		return await this.first(1, columns);
-	};
+	}
 
-	first = async (limit = 1, columns = ['*']) => {
+	async first(limit = 1, columns = ['*']) {
 		this.take(limit);
 		const data = await this.get(columns);
 		return data && data.length > 0 ? data[0] : null;
-	};
+	}
 
-	get = async (columns = ['*']) => {
+	async get(columns = ['*']) {
 		let original = this.columns;
 		if (!original) {
 			this.columns = columns;
@@ -608,9 +608,9 @@ export class Builder {
 		const results = await this.processor.processSelect(this, this.runSelect);
 		this.columns = original;
 		return results;
-	};
+	}
 
-	insert = async values => {
+	async insert(values) {
 		if (!values) {
 			return true;
 		}
@@ -641,57 +641,57 @@ export class Builder {
 		} catch (e) {
 			console.log(e);
 		}
-	};
+	}
 
-	update = async values => {
+	async update(values) {
 		let bindings = array_values(values);
 		bindings.push(...this.getBindings());
 		const sql = this.grammar.compileUpdate(this, values);
 		bindings = this.cleanBindings(bindings);
 		return await this.connection.update(sql, bindings);
-	};
+	}
 
-	delete = async (id = null) => {
+	async delete(id = null) {
 		if (id) {
 			this.where('id', '=', id);
 		}
 		const sql = this.grammar.compileDelete(this);
 		return await this.connection.delete(sql, this.getBindings());
-	};
+	}
 
-	cleanBindings = bindings => {
+	cleanBindings(bindings) {
 		return bindings.filter(binding => (!(binding instanceof QueryExpression) && (typeof binding !== 'function')));
-	};
+	}
 
-	runSelect = async () => {
+	async runSelect() {
 		try {
 			return await this.connection.select(this.toSql(), this.getBindings());
 		} catch (e) {
 			console.log(e);
 		}
-	};
+	}
 
-	getLimit = () => {
+	getLimit() {
 		return this.limit_;
-	};
+	}
 
-	min = column => {
+	min(column) {
 		return this.aggregate('min', [column]);
-	};
+	}
 
-	max = column => {
+	max(column) {
 		return this.aggregate('max', [column]);
-	};
+	}
 
-	sum = column => {
+	sum(column) {
 		return this.aggregate('sum', [column]);
-	};
+	}
 
-	avg = column => {
+	avg(column) {
 		return this.aggregate('avg', [column]);
-	};
+	}
 
-	newQuery = () => {
+	newQuery() {
 		return new Builder(this.connection, this.grammar, this.processor);
-	};
+	}
 }
