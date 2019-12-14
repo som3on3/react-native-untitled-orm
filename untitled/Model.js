@@ -1,6 +1,6 @@
 import {DatabaseManager as DB} from '../DatabaseManager';
 
-export default class Model {
+export class Model {
 	_query = null;
 	_skip = [];
 
