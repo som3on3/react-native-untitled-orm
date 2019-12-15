@@ -70,6 +70,10 @@ export class Model {
 		return await this.get(columns);
 	}
 
+	async delete() {
+		return await this.query.delete(this.id);
+	}
+
 	async get(columns = ['*']) {
 		const results = await this.query.get();
 		return results.map(result => new this.constructor(result));
