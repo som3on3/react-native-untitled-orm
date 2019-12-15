@@ -11,7 +11,7 @@ export class Grammar {
 	}
 
 	wrapList(values) {
-		return values.map(this.wrap);
+		return values.map(this.wrap.bind(this));
 	}
 
 	wrapTable(table) {
@@ -57,12 +57,12 @@ export class Grammar {
 		return expression.toString();
 	}
 
-	columnize = columns => {
-		return columns.map(this.wrap).join(', ');
+	columnize(columns) {
+		return columns.map(this.wrap.bind(this)).join(', ');
 	}
 
 	parameterize(columns) {
-		return columns.map(this.parameter).join(', ');
+		return columns.map(this.parameter.bind(this)).join(', ');
 	}
 
 	parameter(value) {
