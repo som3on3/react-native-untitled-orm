@@ -7,11 +7,11 @@ export class DatabaseManager {
 	static grammar = new SQLiteQueryGrammar();
 	static processor = new SQLiteQueryProcessor();
 
-	static setConfig = config => {
+	static setConfig(config) {
 		ConnectionManager.setConfig(config);
-	};
+	}
 
-	static table = table => {
+	static table(table) {
 		const connectionManager = ConnectionManager.getInstance();
 		const builder = new Builder(
 			connectionManager,
@@ -19,5 +19,5 @@ export class DatabaseManager {
 			DatabaseManager.processor,
 		);
 		return builder.from(table);
-	};
+	}
 }

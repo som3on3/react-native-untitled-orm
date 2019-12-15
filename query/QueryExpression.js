@@ -4,11 +4,11 @@ export class QueryExpression {
 		this.value = value;
 	}
 
-	get_value = () => {
+	get_value() {
 		return this.value;
-	};
+	}
 
-	toString = () => {
+	toString() {
 		return this.get_value().toString();
-	};
+	}
 }

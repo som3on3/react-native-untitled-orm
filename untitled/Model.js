@@ -38,10 +38,10 @@ export class Model {
 		return model.where(column, operator, value, boolean);
 	}
 
-	where = (column, operator = null, value = null, boolean = 'and') => {
+	where(column, operator = null, value = null, boolean = 'and') {
 		this.query = this.query.where(column, operator, value, boolean);
 		return this;
-	};
+	}
 
 	static async find(id) {
 		if (!id) {
@@ -51,7 +51,7 @@ export class Model {
 		return await model.find(id);
 	}
 
-	find = async id => {
+	async find(id) {
 		this.query = this.newQuery();
 		const data = await this.query.find(id);
 		if (data) {
@@ -59,30 +59,30 @@ export class Model {
 			return this;
 		}
 		return null;
-	};
+	}
 
 	static async all(columns = ['*']) {
 		const model = new this();
 		return await model.all(columns);
 	}
 
-	all = async (columns = ['*']) => {
+	async all(columns = ['*']) {
 		return await this.get(columns);
-	};
+	}
 
-	get = async (columns = ['*']) => {
+	async get(columns = ['*']) {
 		const results = await this.query.get();
 		return results.map(result => new this.constructor(result));
-	};
+	}
 
-	first = async (columns = ['*']) => {
+	async first(columns = ['*']) {
 		this.query.limit(1);
 		const items = await this.get(columns);
 		if (items.length > 0) {
 			return items[0];
 		}
 		return null;
-	};
+	}
 
 	async save() {
 		let data = {};
@@ -102,22 +102,22 @@ export class Model {
 		return await this.insert(data);
 	}
 
-	update = async data => {
+	async update(data) {
 		await this.query.update(data);
 		if (this.id && this.id > 0) {
 			return await this.find(this.id);
 		} else {
 			return await this.get();
 		}
-	};
+	}
 
-	insert = async data => {
+	async insert(data) {
 		const insert_id = await this.query.insert(data);
 		if (insert_id > 0) {
 			return await this.find(insert_id);
 		}
 		return null;
-	};
+	}
 
 	get query() {
 		if (!this._query) {
@@ -134,7 +134,7 @@ export class Model {
 		return [];
 	}
 
-	newQuery = () => {
+	newQuery() {
 		return DB.table(this.table);
-	};
+	}
 }

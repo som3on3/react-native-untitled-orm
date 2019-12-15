@@ -10,18 +10,18 @@ export class Grammar {
 		}
 	}
 
-	wrapList = values => {
+	wrapList(values) {
 		return values.map(this.wrap);
-	};
+	}
 
-	wrapTable = table => {
+	wrapTable(table) {
 		if (this.isExpresion(table)) {
 			return this.getValue(table);
 		}
 		return this.wrap(this.table_prefix + table.toString(), true);
-	};
+	}
 
-	wrap = (value, prefix_alias = false) => {
+	wrap(value, prefix_alias = false) {
 		if (this.isExpresion(value)) {
 			return this.getValue(value);
 		}
@@ -43,49 +43,49 @@ export class Grammar {
 			}
 		}
 		return wrapped.join('.');
-	};
+	}
 
-	wrapValue = value => {
+	wrapValue(value) {
 		if (value === '*') {
 			return value;
 		}
 		return '`' + value.replace('"', '""') + '`';
 		//return value;
-	};
+	}
 
-	getValue = expression => {
+	getValue(expression) {
 		return expression.toString();
-	};
+	}
 
 	columnize = columns => {
 		return columns.map(this.wrap).join(', ');
-	};
+	}
 
-	parameterize = columns => {
+	parameterize(columns) {
 		return columns.map(this.parameter).join(', ');
-	};
+	}
 
-	parameter = value => {
+	parameter(value) {
 		if (this.isExpresion(value)) {
 			return this.getValue(value);
 		}
 
 		return this.getMarker();
-	};
+	}
 
-	getTablePrefix = () => {
+	getTablePrefix() {
 		return this.table_prefix;
-	};
+	}
 
-	setTablePrefix = prefix => {
+	setTablePrefix(prefix) {
 		this.table_prefix = prefix;
-	};
+	}
 
-	getMarker = () => {
+	getMarker() {
 		return this.marker;
-	};
+	}
 
-	isExpresion = value => {
+	isExpresion(value) {
 		return value instanceof QueryExpression;
-	};
+	}
 }
