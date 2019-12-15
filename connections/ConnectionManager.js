@@ -9,8 +9,8 @@ export class ConnectionManager {
 
 	connected = false;
 	db = null;
-	appState: null;
-	insert_id: 0;
+	appState = null;
+	insert_id = 0;
 
 	static config = {
 		name: 'test.db',
@@ -63,7 +63,7 @@ export class ConnectionManager {
 		}
 	}
 
-	waitForConnection = () => {
+	waitForConnection(){
 		return new Promise(connected => {
 			if (this.connected) {
 				connected(true);
