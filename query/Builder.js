@@ -605,7 +605,7 @@ export class Builder {
 		if (!original) {
 			this.columns = columns;
 		}
-		const results = await this.processor.processSelect(this, this.runSelect);
+		const results = await this.runSelect();
 		this.columns = original;
 		return results;
 	}
