@@ -1,6 +1,6 @@
 {
   "name": "react-native-untitled-orm",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "ORM for React Native (Android & iOS)",
   "main": "index.js",
   "scripts": {
