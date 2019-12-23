@@ -15,6 +15,10 @@ export class Model {
 		this.mapToObject(obj);
 	}
 
+	get fillable() {
+		return [];
+	}
+
 	get table() {
 		let name = this.constructor.name.toLowerCase();
 		if (name.slice(-1) !== 'y') {
@@ -25,8 +29,9 @@ export class Model {
 
 	mapToObject(obj) {
 		if (obj) {
+			const allowed = this.fillable;
 			for (const [key, value] of Object.entries(obj)) {
-				if (!this._skip.includes(key)) {
+				if (allowed.includes(key)) {
 					this[key] = value;
 				}
 			}
