@@ -1,9 +1,7 @@
 import {DatabaseManager as DB} from '../DatabaseManager';
-import {is_array} from 'react-native-untitled-orm/support/Helpers';
 
 export class Model {
 	_query = null;
-	id = 0;
 
 	constructor(obj = {}) {
 		this.mapToObject(obj);
@@ -100,7 +98,6 @@ export class Model {
 				return await this.insert(data);
 			}
 		}
-		delete this.id;
 		return await this.insert(data);
 	}
 
