@@ -4,14 +4,14 @@ import {ConnectionManager} from "../connections/ConnectionManager";
 export class Schema {
     constructor() {}
 
-    static create(table, callback) {
+    static async create(table, callback) {
         let tbl = new Table(table, 'create');
         callback(tbl);
         const schema = new Schema();
         const sql = schema.createSQL(tbl);
 
         const conn = ConnectionManager.getInstance();
-        conn.select(sql).then(() => {});
+        return await conn.select(sql);
     }
 
     static async dropIfExists(table) {
