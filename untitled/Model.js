@@ -4,6 +4,7 @@ import {is_array} from 'react-native-untitled-orm/support/Helpers';
 export class Model {
 	_query = null;
 	_skip = [];
+	id = 0;
 
 	constructor(obj = {}) {
 		this._skip = ['_query', '_skip'];
@@ -72,21 +73,21 @@ export class Model {
 	}
 
 	async all(columns = ['*']) {
-		return await this.get(columns);
+		return await this.rows(columns);
 	}
 
 	async delete() {
-		return await this.query.delete(this.id);
+		return this.query.delete(this.id);
 	}
 
-	async get(columns = ['*']) {
-		const results = await this.query.get();
+	async rows(columns = ['*']) {
+		const results = await this.query.rows(columns);
 		return results.map(result => new this.constructor(result));
 	}
 
 	async first(columns = ['*']) {
 		this.query.limit(1);
-		const items = await this.get(columns);
+		const items = await this.rows(columns);
 		if (items.length > 0) {
 			return items[0];
 		}
@@ -116,7 +117,7 @@ export class Model {
 		if (this.id && this.id > 0) {
 			return await this.find(this.id);
 		} else {
-			return await this.get();
+			return await this.rows();
 		}
 	}
 

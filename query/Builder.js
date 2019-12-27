@@ -596,11 +596,11 @@ export class Builder {
 
 	async first(limit = 1, columns = ['*']) {
 		this.take(limit);
-		const data = await this.get(columns);
+		const data = await this.rows(columns);
 		return data && data.length > 0 ? data[0] : null;
 	}
 
-	async get(columns = ['*']) {
+	async rows(columns = ['*']) {
 		let original = this.columns;
 		if (!original) {
 			this.columns = columns;
