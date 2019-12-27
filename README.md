@@ -51,3 +51,16 @@ User.where('id', '>', 2).update({email: 'massupdate'}).then(results => {
     console.log(results);
 });
 ```
+
+**Minimal Schema Support:**
+
+A minimal Schema support with ability to create or drop tables and set default values.
+```javascript
+Schema.drop('users').then(() => {
+	Schema.create('users', table => {
+		table.string('email');
+		table.string('password');
+		table.integer('dob').default(0);
+	});
+});
+```
