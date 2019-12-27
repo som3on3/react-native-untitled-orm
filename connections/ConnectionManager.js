@@ -58,7 +58,7 @@ export class ConnectionManager {
 					console.log('database CLOSED');
 				})
 				.catch(error => {
-					throw new Error(error);
+					console.log(error);
 				});
 		}
 	}
@@ -90,7 +90,7 @@ export class ConnectionManager {
 							db = DB;
 						})
 						.catch(error => {
-							throw new Error(error);
+							console.error(error);
 						});
 				})
 				.then(() => {
@@ -100,7 +100,7 @@ export class ConnectionManager {
 					}, 100);
 				})
 				.catch(error => {
-					throw new Error(error);
+					console.error(error);
 				});
 		}
 	}
@@ -123,7 +123,7 @@ export class ConnectionManager {
 							data(results.rows.raw());
 						},
 						(_, error) => {
-							throw new Error(error);
+							console.error(error);
 						},
 					);
 				})
