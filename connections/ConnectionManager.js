@@ -145,14 +145,6 @@ export class ConnectionManager {
 		return await this.select(sql, params);
 	}
 
-	getMarker() {
-		return '?';
-	}
-
-	getSchemaManager() {
-		//todo...
-	}
-
 	static getInstance() {
 		if (!ConnectionManager.instance) {
 			ConnectionManager.instance = new ConnectionManager();
