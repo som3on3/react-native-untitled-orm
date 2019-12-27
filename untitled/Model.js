@@ -3,20 +3,14 @@ import {is_array} from 'react-native-untitled-orm/support/Helpers';
 
 export class Model {
 	_query = null;
-	_skip = [];
 	id = 0;
 
 	constructor(obj = {}) {
-		this._skip = ['_query', '_skip'];
-		for (const [key, value] of Object.entries(this)) {
-			if (typeof value === 'function') {
-				this._skip.push(key);
-			}
-		}
 		this.mapToObject(obj);
 	}
 
 	get fillable() {
+		console.error('fillable not defined');
 		return [];
 	}
 
@@ -92,8 +86,9 @@ export class Model {
 
 	async save() {
 		let data = {};
+		const fill = this.fillable;
 		for (const [key, value] of Object.entries(this)) {
-			if (!this._skip.includes(key)) {
+			if (fill.includes(key)) {
 				data[key] = value;
 			}
 		}
