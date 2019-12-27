@@ -21,11 +21,7 @@ export class Model {
 	}
 
 	get table() {
-		let name = this.constructor.name.toLowerCase();
-		if (name.slice(-1) !== 'y') {
-			name += 's';
-		}
-		return name;
+		return null;
 	}
 
 	mapToObject(obj) {
