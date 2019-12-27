@@ -109,6 +109,7 @@ export class Model {
 				return await this.insert(data);
 			}
 		}
+		delete this.id;
 		return await this.insert(data);
 	}
 
