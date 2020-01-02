@@ -37,6 +37,16 @@ export class Model {
 		return this;
 	}
 
+	static orderBy(column, direction = 'asc') {
+		const model = new this();
+		return model.orderBy(column, direction);
+	}
+
+	orderBy(column, direction = 'asc') {
+		this.query = this.query.orderBy(column, direction);
+		return this;
+	}
+
 	static async find(id) {
 		if (!id) {
 			return null;
