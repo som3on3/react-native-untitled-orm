@@ -1,7 +1,7 @@
 import SQLite from 'react-native-sqlite-storage';
 import {AppState} from 'react-native';
 import {array_keys, array_values} from '../support/Helpers';
-SQLite.DEBUG(true);
+SQLite.DEBUG(false);
 SQLite.enablePromise(true);
 
 export class ConnectionManager {
