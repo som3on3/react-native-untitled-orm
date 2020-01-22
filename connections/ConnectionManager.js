@@ -90,7 +90,7 @@ export class ConnectionManager {
 							db = DB;
 						})
 						.catch(error => {
-							console.error(error);
+							console.log(error);
 						});
 				})
 				.then(() => {
@@ -100,7 +100,7 @@ export class ConnectionManager {
 					}, 100);
 				})
 				.catch(error => {
-					console.error(error);
+					console.log(error);
 				});
 		}
 	}
@@ -123,12 +123,12 @@ export class ConnectionManager {
 							data(results.rows.raw());
 						},
 						(_, error) => {
-							console.error(error);
+							console.log(error);
 						},
 					);
 				})
 				.catch(error => {
-					console.error(error.message);
+					console.log(error.message);
 				});
 		});
 	}
